@@ -1,0 +1,19 @@
+{
+    "name": "bengel/wordpress-common",
+    "type": "library",
+    "description": "Common utilities for wordpress plugins and themes.",
+    "autoload": {
+        "psr-4": {
+            "Bengel\\Wordpress\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "freekattema",
+            "email": "freek@bengelmedia.nl"
+        }
+    ],
+    "require-dev": {
+        "php-stubs/wordpress-stubs": "^7.1"
+    }
+}
