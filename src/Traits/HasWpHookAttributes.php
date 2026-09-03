@@ -8,9 +8,9 @@ use ReflectionAttribute;
 use ReflectionClass;
 use ReflectionMethod;
 
-trait HasAttributes
+trait HasWpHookAttributes
 {
-    protected function registerAnnotatedHooks(): void
+    private function registerAnnotatedHooks(): void
     {
         $reflection = new ReflectionClass($this);
 
@@ -39,15 +39,15 @@ trait HasAttributes
         add_action(
             $instance->hook,
             function (...$args) use ($method, $instance) {
-                if ($instance->nonce_action && $instance->nonce_field) {
-                    if (!isset($_POST[$instance->nonce_field]) || !wp_verify_nonce($_POST[$instance->nonce_field], $instance->nonce_action)) {
-                        wp_die($instance->nonce_message ?? 'Invalid nonce.');
+                if ($instance->nonce) {
+                    if (!isset($_POST[$instance->nonce['field']]) || !wp_verify_nonce($_POST[$instance->nonce['field']], $instance->nonce['action'])) {
+                        wp_die($instance->nonce['message'] ?? 'Invalid nonce.');
                     }
                 }
 
-                if ($instance->user_capability && $instance->user_message) {
-                    if (!current_user_can($instance->user_capability)) {
-                        wp_die($instance->user_message);
+                if ($instance->capability) {
+                    if (!current_user_can($instance->capability['capability'])) {
+                        wp_die($instance->capability['message']);
                     }
                 }
 

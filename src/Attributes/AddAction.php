@@ -7,15 +7,19 @@ use Attribute;
 #[Attribute(Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
 class AddAction
 {
+    /**
+     * @param string $hook
+     * @param int $priority
+     * @param int|null $acceptedArgs
+     * @param array{action: string, field: string, message?:string}|null $nonce
+     * @param array{capability: string, message: string}|null $capability
+     */
     public function __construct(
         public string  $hook,
         public int     $priority = 10,
         public ?int    $acceptedArgs = null,
-        public ?string $nonce_action = null,
-        public ?string $nonce_field = null,
-        public ?string $nonce_message = null,
-        public ?string $user_capability = null,
-        public ?string $user_message = null
+        public ?array $nonce = null,
+        public ?array $capability = null
     )
     {
     }
