@@ -15,7 +15,6 @@ trait HasWpHookAttributes
         $reflection = new ReflectionClass($this);
 
         foreach ($reflection->getMethods(ReflectionMethod::IS_PUBLIC | ReflectionMethod::IS_PROTECTED | ReflectionMethod::IS_PRIVATE) as $method) {
-            $acceptedArgs = $method->getNumberOfParameters();
 
             // Register Actions
             foreach ($method->getAttributes(AddAction::class, ReflectionAttribute::IS_INSTANCEOF) as $attribute) {
