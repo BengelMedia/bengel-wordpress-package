@@ -9,12 +9,12 @@
     },
     "authors": [
         {
-            "name": "freekattema",
+            "name": "Freek Attema",
             "email": "freek@bengelmedia.nl"
         }
     ],
     "require-dev": {
-        "php-stubs/wordpress-stubs": "^7.1",
+        "php-stubs/wordpress-stubs": "*",
         "phpstan/extension-installer": "^1.4",
         "phpstan/phpstan": "^2.2",
         "szepeviktor/phpstan-wordpress": "^2.0"
