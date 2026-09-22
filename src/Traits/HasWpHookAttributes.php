@@ -4,6 +4,7 @@ namespace Bengel\Wordpress\Traits;
 
 use Bengel\Wordpress\Attributes\AddAction;
 use Bengel\Wordpress\Attributes\AddFilter;
+use Bengel\Wordpress\Attributes\RestRoute;
 use ReflectionAttribute;
 use ReflectionClass;
 use ReflectionMethod;
@@ -28,6 +29,13 @@ trait HasWpHookAttributes
                 /** @var AddFilter $instance */
                 $instance = $attribute->newInstance();
                 $this->__register_add_filter($method, $instance);
+            }
+
+            // register rest routes
+            foreach($method->getAttributes(RestRoute::class, ReflectionAttribute::IS_INSTANCEOF) as $attribute) {
+                /** @var RestRoute $instance */
+                $instance = $attribute->newInstance();
+                $this->__register_rest_route($method, $instance);
             }
         }
     }
@@ -65,5 +73,33 @@ trait HasWpHookAttributes
             $instance->priority,
             $instance->acceptedArgs ?? $method->getNumberOfParameters(),
         );
+    }
+
+    private function __register_rest_route(ReflectionMethod $method, RestRoute $instance): void {
+        add_action('rest_api_init', function() use ($method, $instance) {
+            $args = [
+                'callback' => [$this, $method->getName()]
+            ];
+            if($instance->methods) {
+                $args['methods'] = $instance->methods;
+            }
+            if($instance->permission_callback) {
+                $args['permission_callback'] = [$this, $instance->permission_callback];
+            }
+            if($instance->allow_batch) {
+                $args['allow_batch'] = $instance->allow_batch;
+            }
+            if($instance->schema) {
+                if(is_array($instance->schema)) {
+                    $args['schema'] = $instance->schema;
+                } else {
+                    $args['schema'] = [$this, $instance->schema];
+                }
+            }
+            if($instance->show_in_index) {
+                $args['show_in_index'] = $instance->show_in_index;
+            }
+            register_rest_route($instance->route_namespace, $instance->route, $args, $instance->override);
+        });
     }
 }
