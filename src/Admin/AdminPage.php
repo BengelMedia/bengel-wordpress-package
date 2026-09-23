@@ -11,8 +11,10 @@ abstract class AdminPage {
     abstract public function get_title(): string;
     abstract public function render(): void;
 
-    final public function __construct() {
-        $this->registerAnnotatedHooks();
+    final public function __construct(bool $register = true) {
+        if($register) {
+            $this->registerAnnotatedHooks();
+        }
     }
 
     public function get_menu_title(): string {
